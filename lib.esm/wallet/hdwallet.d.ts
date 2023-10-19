@@ -15,6 +15,19 @@ import type { Wordlist } from "../wordlists/index.js";
  *  The default derivation path for Ethereum HD Nodes. (i.e. ``"m/44'/60'/0'/0/0"``)
  */
 export declare const defaultPath: string;
+export type EncryptOptions = {
+    progressCallback?: ProgressCallback;
+    iv?: BytesLike;
+    entropy?: BytesLike;
+    client?: string;
+    salt?: BytesLike;
+    uuid?: string;
+    scrypt?: {
+        N?: number;
+        r?: number;
+        p?: number;
+    };
+};
 /**
  *  An **HDNodeWallet** is a [[Signer]] backed by the private key derived
  *  from an HD Node using the [[link-bip-32]] stantard.
@@ -83,7 +96,7 @@ export declare class HDNodeWallet extends BaseWallet {
      *  If %%progressCallback%% is specified, it will receive periodic
      *  updates as the encryption process progreses.
      */
-    encrypt(password: Uint8Array | string, progressCallback?: ProgressCallback): Promise<string>;
+    encrypt(password: Uint8Array | string, options?: EncryptOptions): Promise<string>;
     /**
      *  Returns a [JSON Keystore Wallet](json-wallets) encryped with
      *  %%password%%.

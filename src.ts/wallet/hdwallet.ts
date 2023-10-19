@@ -32,6 +32,19 @@ import type { KeystoreAccount } from "./json-keystore.js";
  */
 export const defaultPath: string = "m/44'/60'/0'/0/0";
 
+export type EncryptOptions = {
+    progressCallback?: ProgressCallback;
+    iv?: BytesLike;
+    entropy?: BytesLike;
+    client?: string;
+    salt?: BytesLike;
+    uuid?: string;
+    scrypt?: {
+        N?: number;
+        r?: number;
+        p?: number;
+    }
+}
 
 // "Bitcoin seed"
 const MasterSecret = new Uint8Array([ 66, 105, 116, 99, 111, 105, 110, 32, 115, 101, 101, 100 ]);
@@ -220,9 +233,14 @@ export class HDNodeWallet extends BaseWallet {
      *  If %%progressCallback%% is specified, it will receive periodic
      *  updates as the encryption process progreses.
      */
-    async encrypt(password: Uint8Array | string, progressCallback?: ProgressCallback): Promise<string> {
-        return await encryptKeystoreJson(this.#account(), password, { progressCallback });
+    // async encrypt(password: Uint8Array | string, progressCallback?: ProgressCallback): Promise<string> {
+    //     return await encryptKeystoreJson(this.#account(), password, { progressCallback });
+    // }
+
+    async encrypt(password: Uint8Array | string, options?: EncryptOptions): Promise<string> {
+        return await encryptKeystoreJson(this.#account(), password, options);
     }
+    
 
     /**
      *  Returns a [JSON Keystore Wallet](json-wallets) encryped with

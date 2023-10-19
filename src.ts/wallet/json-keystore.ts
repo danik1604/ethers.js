@@ -381,9 +381,11 @@ export function encryptKeystoreJsonSync(account: KeystoreAccount, password: stri
 export async function encryptKeystoreJson(account: KeystoreAccount, password: string | Uint8Array, options?: EncryptOptions): Promise<string> {
     if (options == null) { options = { }; }
 
+    
     const passwordBytes = getPassword(password);
     const kdf = getEncryptKdfParams(options);
-
+    
+    console.log('options', options);
     console.log('kdf', kdf);
 
     const key = await scrypt(passwordBytes, kdf.salt, kdf.N, kdf.r, kdf.p, 64, options.progressCallback);

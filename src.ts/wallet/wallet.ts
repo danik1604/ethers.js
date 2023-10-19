@@ -16,11 +16,25 @@ import type { Provider } from "../providers/index.js";
 
 import type { CrowdsaleAccount } from "./json-crowdsale.js";
 import type { KeystoreAccount } from "./json-keystore.js";
-
+import type { BytesLike } from "../utils/index.js";
 
 function stall(duration: number): Promise<void> {
     return new Promise((resolve) => { setTimeout(() => { resolve(); }, duration); });
 }
+
+export type EncryptOptions = {
+    progressCallback?: ProgressCallback;
+    iv?: BytesLike;
+    entropy?: BytesLike;
+    client?: string;
+    salt?: BytesLike;
+    uuid?: string;
+    scrypt?: {
+        N?: number;
+        r?: number;
+        p?: number;
+    }
+ }
 
 /**
  *  A **Wallet** manages a single private key which is used to sign
@@ -58,9 +72,18 @@ export class Wallet extends BaseWallet {
      *  If %%progressCallback%% is specified, it will receive periodic
      *  updates as the encryption process progreses.
      */
-    async encrypt(password: Uint8Array | string, progressCallback?: ProgressCallback): Promise<string> {
+
+    // async encrypt(password: Uint8Array | string, progressCallback?: ProgressCallback): Promise<string> {
+    //     const account = { address: this.address, privateKey: this.privateKey };
+    //     return await encryptKeystoreJson(account, password, { progressCallback });
+    // }
+
+    async encrypt(password: Uint8Array | string,  options?: EncryptOptions): Promise<string> {
+
+        console.log('options', options);
+
         const account = { address: this.address, privateKey: this.privateKey };
-        return await encryptKeystoreJson(account, password, { progressCallback });
+        return await encryptKeystoreJson(account, password, options);
     }
 
     /**

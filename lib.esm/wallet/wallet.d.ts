@@ -3,6 +3,20 @@ import { BaseWallet } from "./base-wallet.js";
 import { HDNodeWallet } from "./hdwallet.js";
 import type { ProgressCallback } from "../crypto/index.js";
 import type { Provider } from "../providers/index.js";
+import type { BytesLike } from "../utils/index.js";
+export type EncryptOptions = {
+    progressCallback?: ProgressCallback;
+    iv?: BytesLike;
+    entropy?: BytesLike;
+    client?: string;
+    salt?: BytesLike;
+    uuid?: string;
+    scrypt?: {
+        N?: number;
+        r?: number;
+        p?: number;
+    };
+};
 /**
  *  A **Wallet** manages a single private key which is used to sign
  *  transactions, messages and other common payloads.
@@ -28,7 +42,7 @@ export declare class Wallet extends BaseWallet {
      *  If %%progressCallback%% is specified, it will receive periodic
      *  updates as the encryption process progreses.
      */
-    encrypt(password: Uint8Array | string, progressCallback?: ProgressCallback): Promise<string>;
+    encrypt(password: Uint8Array | string, options?: EncryptOptions): Promise<string>;
     /**
      *  Returns a [JSON Keystore Wallet](json-wallets) encryped with
      *  %%password%%.
